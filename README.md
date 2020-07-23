@@ -20,3 +20,9 @@ Coursework ML.
 
 The problem of predicting the churn of customers of a telecommunications company.
 EDA аnalysis, analysis of metrics of basic algorithms and stacking. 
+
+
+Titanic Kaggle.
+
+Solving the popular Kaggle competition as one of the homework. 
+The creation of features is taken by example. Model built by tasks.
