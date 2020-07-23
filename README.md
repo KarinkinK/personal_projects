@@ -14,3 +14,9 @@ Coursework_analytics 2.
 Testing analytical hypotheses and the effectiveness of the work of employees.
 
 2 part. Work with API VK. Analytics of posts in the Skillbox public, recommendations for marketers and content managers.
+
+
+Coursework ML.
+
+The problem of predicting the churn of customers of a telecommunications company.
+EDA аnalysis, analysis of metrics of basic algorithms and stacking. 
