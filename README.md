@@ -1,4 +1,4 @@
-# pesonal_repo
+# pesonal_projects
 This repository contains notebooks with training projects in analytics and machine learning.
 Mostly used python pandas matplotlib sikitlearn
 
