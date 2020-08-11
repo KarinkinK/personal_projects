@@ -22,6 +22,11 @@ The problem of predicting the churn of customers of a telecommunications company
 EDA аnalysis, analysis of metrics of basic algorithms and stacking. 
 
 
+semantic segmentation
+
+Convolutional neural network for a semantic segmentation problem, work with COCO dataset, accuracy on validation path 90,95%
+
+
 Titanic Kaggle.
 
 Solving the popular Kaggle competition as one of the homework. 
