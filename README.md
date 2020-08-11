@@ -24,7 +24,7 @@ EDA аnalysis, analysis of metrics of basic algorithms and stacking.
 
 semantic segmentation
 
-Convolutional neural network for a semantic segmentation problem, work with COCO dataset, accuracy on validation path 90,95%
+Convolutional neural network for a semantic segmentation problem, work with COCO dataset, accuracy on validation part 90,95%
 
 
 Titanic Kaggle.
