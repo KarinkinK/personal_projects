@@ -28,7 +28,4 @@ Convolutional neural network for a semantic human image segmentation problem,
 work with COCO dataset, accuracy on validation part 90,95%
 
 
-Titanic Kaggle.
-
-Solving the popular Kaggle competition as one of the homework. 
-The creation of features is taken by example. Model built by tasks.
+Test Task in one company for ML Engeener vacancy
