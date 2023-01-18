@@ -28,4 +28,4 @@ Convolutional neural network for a semantic human image segmentation problem,
 work with COCO dataset, accuracy on validation part 90,95%
 
 
-Test Task in one company for ML Engeener vacancy
+Test Task in one company for ML Engineer vacancy
