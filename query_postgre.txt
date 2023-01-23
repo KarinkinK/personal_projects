@@ -1,0 +1,89 @@
+Задание 1
+
+В базе данных PG (Postgre) cуществуют 2 таблицы:
+
+1. Таблица "opers", с операциями по обработке нарушений. В ней хранится информация по всем операциям обработки нарушений.
+  |       Column       |              Type              | Description
+  ---------------------+--------------------------------+--------------------------------------------------------+
+  |   viol_oper_id     | bigint (PK)                    | Идентификатор операции обработки нарушения ПДД
+  |   tr_viol_id       | bigint                         | Идентификатор нарушения ПДД
+  |   oper_code        | integer                        | Тип операции обработки нарушения ПДД
+  |   refuse_code      | integer                        | Результирующий код операции обработки нарушения ПДД
+  |   isp_id           | bigint                         | Идентификатор того, кто произвел обработку нарушения ПДД
+  |   date_oper        | timestamp(0) without time zone | Дата и время операции обработки нарушения ПДД
+  |   viol_datetime    | timestamp(0) without time zone | Дата и время нарушения ПДД
+
+2. Таблица "viols", с нарушениями правил дорожного движения транспортными средствами.
+
+  |   Column    |              Type              | Description
+  --------------+--------------------------------+--------------------------------------------------+
+  | tr_viol_id  | bigint (PK)                    | Идентификатор нарушения
+  | viol_code   | integer                        | Код нарушения ПДД
+  | time_check  | timestamp(0) without time zone | Дата и время нарушения ПДД
+  | stage_code  | integer                        | Этап обработки нарушения ПДД
+  | refuse_code | integer                        | Результирующий код обработки нарушения ПДД
+  | camera_id   | integer                        | Идентификатор камеры зафиксировавший нарушение ПДД
+
+
+Подготовить выгрузку, содержащую информацию, за период нарушения ПДД с 2018-04-01 по 2018-04-20 с детализацией до даты нарушения. Выгрузка должна содержать атрибуты:
+    Дата нарушения ПДД;
+    Число нарушений ПДД всего;
+    Число нарушений ПДД у которых результирующий код обработки нарушения ПДД равен 0;
+    Число нарушений ПДД по которым была операция обработки тип 29;
+    Число нарушений ПДД по которым не было операции обработки тип 29, а результирующий код обработки нарушения ПДД равен 0;
+
+
+2. Варианты запросов
+
+ 1) 
+
+select date_trunc('day', opers.viol_datetime) as ddate, 
+       count(distinct opers.tr_viol_id) as total,
+       count(distinct opers.tr_viol_id)
+       filter(where viols.refuse_code = 0) as code_0,
+       count(distinct opers.tr_viol_id)
+       filter(where opers.oper_code = 29) as type_29,
+       count(distinct opers.tr_viol_id)
+       filter(where opers.tr_viol_id not in (
+              select distinct opers.tr_viol_id from opers
+              where oper_code = 29) and viols.refuse_code = 0) as type_not_29_code_0
+from opers left join viols on opers.tr_viol_id=viols.tr_viol_id
+where opers.viol_datetime BETWEEN '2018-04-01' AND '2018-04-21'
+group by ddate
+order by ddate;
+
+ 2) 
+
+SELECT q1.viol_date, total, code_0, type_29, type_not_29_code_0 FROM    
+    
+    (select count(viols.tr_viol_id) as total, date_trunc('day', viols.time_check) as viol_date
+    from viols
+    group by viol_date
+    order by viol_date) as q1 left join 
+
+    (select count(viols.tr_viol_id) as code_0, date_trunc('day', viols.time_check) as viol_date
+    from viols
+    where viols.refuse_code = 0
+    group by viol_date
+    order by viol_date) as q2 on q1.viol_date=q2.viol_date 
+    
+    left join 
+
+    (select count(distinct opers.tr_viol_id) as type_29, date_trunc('day', opers.viol_datetime) as viol_date
+    from opers
+    where opers.oper_code = 29
+    group by viol_date
+    order by viol_date) as q3 on q1.viol_date=q3.viol_date
+    
+    left join
+
+    (select count(distinct opers.tr_viol_id) as type_not_29_code_0, date_trunc('day', opers.viol_datetime) as viol_date
+    from opers left join viols on opers.tr_viol_id=viols.tr_viol_id
+    where opers.tr_viol_id not in (
+                  select distinct opers.tr_viol_id from opers
+                  where opers.oper_code = 29) and viols.refuse_code = 0
+    group by viol_date
+    order by viol_date) as q4 on q1.viol_date=q4.viol_date
+WHERE opers.viol_datetime BETWEEN '2018-04-01' AND '2018-04-21'
+ORDER BY q1.viol_date;
+
